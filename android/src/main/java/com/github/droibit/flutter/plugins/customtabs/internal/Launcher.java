@@ -124,11 +124,11 @@ import java.util.regex.Pattern;
   public void launch(@NonNull Context context, @NonNull Uri uri,
       @NonNull CustomTabsIntent customTabsIntent, @Nullable List<String> extraCustomTabs) {
     final CustomTabsFallback fallback;
-    if (extraCustomTabs != null && !extraCustomTabs.isEmpty()) {
-      fallback = new LaunchNonChromeCustomTabs(extraCustomTabs);
-    } else {
-      fallback = new LaunchBrowser();
-    }
-    CustomTabsLauncher.launch(context, customTabsIntent, uri, fallback);
+//    if (extraCustomTabs != null && !extraCustomTabs.isEmpty()) {
+//      fallback = new LaunchNonChromeCustomTabs(extraCustomTabs);
+//    } else {
+//      fallback = new LaunchBrowser();
+//    }
+    CustomTabsLauncher.launch(context, customTabsIntent, uri, null);
   }
 }
