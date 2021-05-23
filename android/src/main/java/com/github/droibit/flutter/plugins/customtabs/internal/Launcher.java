@@ -13,8 +13,8 @@ import androidx.annotation.RestrictTo;
 import androidx.browser.customtabs.CustomTabsIntent;
 import com.droibit.android.customtabs.launcher.CustomTabsFallback;
 import com.droibit.android.customtabs.launcher.CustomTabsLauncher;
-import com.droibit.android.customtabs.launcher.CustomTabsLauncher.LaunchBrowser;
-import com.droibit.android.customtabs.launcher.CustomTabsLauncher.LaunchNonChromeCustomTabs;
+import com.github.droibit.flutter.plugins.customtabs.WebViewActivity;
+
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -122,13 +122,7 @@ import java.util.regex.Pattern;
   }
 
   public void launch(@NonNull Context context, @NonNull Uri uri,
-      @NonNull CustomTabsIntent customTabsIntent, @Nullable List<String> extraCustomTabs) {
-    final CustomTabsFallback fallback;
-//    if (extraCustomTabs != null && !extraCustomTabs.isEmpty()) {
-//      fallback = new LaunchNonChromeCustomTabs(extraCustomTabs);
-//    } else {
-//      fallback = new LaunchBrowser();
-//    }
-    CustomTabsLauncher.launch(context, customTabsIntent, uri, null);
+      @NonNull CustomTabsIntent customTabsIntent, @Nullable CustomTabsFallback fallback) {
+    CustomTabsLauncher.launch(context, customTabsIntent, uri, fallback);
   }
 }

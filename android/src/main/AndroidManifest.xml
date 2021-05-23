@@ -1,1 +1,9 @@
-<manifest package="com.github.droibit.plugins.customtabs" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.github.droibit.plugins.customtabs">
+
+    <application>
+        <activity
+            android:theme="@style/Theme.AppCompat"
+            android:name="com.github.droibit.flutter.plugins.customtabs.WebViewActivity" />
+    </application>
+</manifest>

@@ -36,17 +36,19 @@ import './url_launcher.dart';
 /// ```
 Future<void> launch(
   String urlString, {
-  @required CustomTabsOption? option,
+  FallbackHandler? handler,
+  required CustomTabsOption option,
 }) {
-  assert(option != null);
-
-  return _launcher(urlString, option!);
+  return _launcher(urlString, option, handler);
 }
 
 typedef _PlatformLauncher = Future<void> Function(
   String urlString,
   CustomTabsOption option,
+  FallbackHandler? handler,
 );
+
+typedef FallbackHandler = Future<void> Function(String urlString);
 
 _PlatformLauncher get _launcher {
   _platformLauncher = Platform.isAndroid ? customTabsLauncher : urlLauncher;

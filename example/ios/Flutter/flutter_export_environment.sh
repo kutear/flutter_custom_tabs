@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/anubhav/Documents/flutter-sdk"
-export "FLUTTER_APPLICATION_PATH=/Users/anubhav/Documents/ProjectFiles/flutter_custom_tabs/example"
+export "FLUTTER_ROOT=/Users/bytedance/Applications/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/bytedance/Work/Android/flutter_custom_tabs_fork/example"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "SYMROOT=${SOURCE_ROOT}/../build/ios"
