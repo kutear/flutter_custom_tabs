@@ -3,7 +3,10 @@ package com.github.droibit.flutter.plugins.customtabs;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Browser;
 
@@ -19,9 +22,12 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Intent.ACTION_VIEW;
 
 public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
     private MethodChannel globalChannel;
@@ -32,13 +38,13 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
     final MethodChannel channel =
         new MethodChannel(registrar.messenger(), "com.github.droibit.flutter.plugins.custom_tabs");
     channel.setMethodCallHandler(new CustomTabsPlugin(channel, registrar));
-    
+
   }
 
   private static final String KEY_OPTION = "option";
 
   private static final String KEY_URL = "url";
-  
+
   private static final String KEY_ID = "id";
 
   private static final String KEY_EXTRA_CUSTOM_TABS = "extraCustomTabs";
@@ -61,11 +67,44 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
       case "launch":
         launch(((Map<String, Object>) call.arguments), result);
         break;
+      case "isSupportCustomTabs":
+        isSupportCustomTabs(result);
+        break;
       default:
         result.notImplemented();
         break;
     }
   }
+  private void isSupportCustomTabs(@NonNull MethodChannel.Result result) {
+    final PackageManager pm = registrar.context().getPackageManager();
+    final int flag;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      flag = PackageManager.MATCH_ALL;
+    } else {
+      flag = PackageManager.MATCH_DEFAULT_ONLY;
+    }
+    final Intent activityIntent = new Intent(ACTION_VIEW, Uri.parse("https://www.google.com"));
+    final List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(activityIntent, flag);
+
+    final List<String> installedCustomTabs = new ArrayList<>();
+    for (ResolveInfo resolveInfo : resolveInfoList) {
+      final String packageName = resolveInfo.activityInfo.packageName;
+      if (supportedCustomTabs(pm, packageName)) {
+        installedCustomTabs.add(packageName);
+      }
+    }
+    result.success(installedCustomTabs);
+  }
+
+  private boolean supportedCustomTabs(
+          @NonNull PackageManager pm,
+          @NonNull String packageName) {
+    // Whether support Chrome Custom Tabs.
+    final Intent serviceIntent =
+            new Intent("android.support.customtabs.action.CustomTabsService").setPackage(packageName);
+    return pm.resolveService(serviceIntent, 0) != null;
+  }
+
 
   @SuppressWarnings("unchecked")
   private void launch(@NonNull final Map<String, Object> args, @NonNull MethodChannel.Result result) {

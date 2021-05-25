@@ -34,6 +34,8 @@ class MyApp extends StatelessWidget {
 
   Future<void> _launchURL(BuildContext context) async {
     try {
+      final isSupport = await isSupportCustomTabs;
+      print(isSupport);
       await launch(
         'https://flutter.dev',
         // handler: (url) async {

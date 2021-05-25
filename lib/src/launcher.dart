@@ -42,6 +42,8 @@ Future<void> launch(
   return _launcher(urlString, option, handler);
 }
 
+Future<bool> get isSupportCustomTabs => isSupportCustomTabsImpl;
+
 typedef _PlatformLauncher = Future<void> Function(
   String urlString,
   CustomTabsOption option,
