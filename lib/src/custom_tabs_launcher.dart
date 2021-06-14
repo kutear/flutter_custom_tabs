@@ -60,6 +60,6 @@ Future<bool> customTabsLauncher(
 
 Future<bool> get isSupportCustomTabsImpl {
   return _channel
-      .invokeListMethod<List<String>>('isSupportCustomTabs')
-      .then((value) => value?.isNotEmpty ?? false);
+      .invokeMethod<bool>('isSupportCustomTabs')
+      .then((value) => value == true);
 }

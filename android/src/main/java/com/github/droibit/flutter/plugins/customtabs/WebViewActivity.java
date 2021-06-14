@@ -2,11 +2,12 @@ package com.github.droibit.flutter.plugins.customtabs;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 public class WebViewActivity extends AppCompatActivity {
     public static final String EXTRA_URL = "extra.url";

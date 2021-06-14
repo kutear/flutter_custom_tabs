@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-
-import 'package:flutter/foundation.dart';
-
 import './custom_tabs_launcher.dart';
 import './custom_tabs_option.dart';
-import './url_launcher.dart';
 
 /// Open the specified Web URL with Custom Tabs.
 ///
@@ -53,7 +49,10 @@ typedef _PlatformLauncher = Future<void> Function(
 typedef FallbackHandler = Future<void> Function(String urlString);
 
 _PlatformLauncher get _launcher {
-  _platformLauncher = Platform.isAndroid ? customTabsLauncher : urlLauncher;
+  if (!Platform.isAndroid) {
+    throw Exception('not support this platform');
+  }
+  _platformLauncher = customTabsLauncher;
   return _platformLauncher;
 }
 
