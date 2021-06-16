@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 
 import static android.content.Intent.ACTION_VIEW;
 
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Launcher {
 
     private static final String KEY_OPTIONS_TOOLBAR_COLOR = "toolbarColor";

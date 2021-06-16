@@ -3,10 +3,7 @@ package com.github.droibit.flutter.plugins.customtabs;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,17 +11,13 @@ import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.github.droibit.flutter.plugins.customtabs.internal.Launcher;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.flutter.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static android.content.Intent.ACTION_VIEW;
 
 public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
     private MethodChannel globalChannel;
@@ -128,9 +121,9 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
                         return;
                     }
                 }
-                Intent intent = new Intent(context, WebViewActivity.class);
-                intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
-                context.startActivity(intent);
+            Intent intent = new Intent(context, WebViewActivity.class);
+            intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
+            context.startActivity(intent);
             });
             result.success(null);
         } catch (ActivityNotFoundException e) {

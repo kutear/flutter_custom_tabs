@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:theme="@style/Theme.AppCompat"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name="com.github.droibit.flutter.plugins.customtabs.WebViewActivity" />
     </application>
 </manifest>
