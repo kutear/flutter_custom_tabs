@@ -121,9 +121,10 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
                         return;
                     }
                 }
-            Intent intent = new Intent(context, WebViewActivity.class);
-            intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
-            context.startActivity(intent);
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
+                intent.putExtra(WebViewActivity.EXTRA_OPTION, new HashMap<>(options));
+                context.startActivity(intent, customTabsIntent.startAnimationBundle);
             });
             result.success(null);
         } catch (ActivityNotFoundException e) {

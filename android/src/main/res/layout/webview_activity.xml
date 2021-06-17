@@ -18,10 +18,12 @@
             app:contentInsetStartWithNavigation="56dp"
             app:layout_scrollFlags="scroll|enterAlways" />
 
-        <androidx.core.widget.ContentLoadingProgressBar
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/web_act_progress_bar"
             android:layout_width="match_parent"
-            android:layout_height="5dp" />
+            android:layout_height="2dp"
+            android:visibility="gone" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.example.nestedscrollwebview.NestedScrollWebView

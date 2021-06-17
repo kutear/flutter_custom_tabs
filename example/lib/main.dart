@@ -37,12 +37,12 @@ class MyApp extends StatelessWidget {
       final isSupport = await isSupportCustomTabs;
       print(isSupport);
       await launch(
-        'https://flutter.dev',
+        'https://www.zhihu.com/question/40492181/answer/1910855638?content_id=1381679307534778368&type=zvideo',
         // handler: (url) async {
         //   print(url);
         // },
         option: CustomTabsOption(
-          toolbarColor: Theme.of(context).primaryColor,
+          toolbarColor: Colors.white,
           enableDefaultShare: true,
           enableUrlBarHiding: true,
           showPageTitle: true,

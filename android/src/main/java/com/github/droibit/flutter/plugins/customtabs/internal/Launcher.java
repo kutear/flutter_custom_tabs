@@ -24,13 +24,13 @@ import static android.content.Intent.ACTION_VIEW;
 
 public class Launcher {
 
-    private static final String KEY_OPTIONS_TOOLBAR_COLOR = "toolbarColor";
+    public static final String KEY_OPTIONS_TOOLBAR_COLOR = "toolbarColor";
     private static final String KEY_OPTIONS_ENABLE_URL_BAR_HIDING = "enableUrlBarHiding";
     private static final String KEY_OPTIONS_SHOW_PAGE_TITLE = "showPageTitle";
     private static final String KEY_OPTIONS_DEFAULT_SHARE_MENU_ITEM = "enableDefaultShare";
     private static final String KEY_OPTIONS_ENABLE_INSTANT_APPS = "enableInstantApps";
     private static final String KEY_OPTIONS_ANIMATIONS = "animations";
-    private static final String KEY_HEADERS = "headers";
+    public static final String KEY_HEADERS = "headers";
     private static final String KEY_ANIMATION_START_ENTER = "startEnter";
     private static final String KEY_ANIMATION_START_EXIT = "startExit";
     private static final String KEY_ANIMATION_END_ENTER = "endEnter";
