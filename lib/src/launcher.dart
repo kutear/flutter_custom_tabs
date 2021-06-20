@@ -38,6 +38,13 @@ Future<void> launch(
   return _launcher(urlString, option, handler);
 }
 
+Future<void> launchNative(
+  String urlString, {
+  required CustomTabsOption option,
+}) {
+  return customLaunchNative(urlString, option);
+}
+
 Future<bool> get isSupportCustomTabs => isSupportCustomTabsImpl;
 
 typedef _PlatformLauncher = Future<void> Function(

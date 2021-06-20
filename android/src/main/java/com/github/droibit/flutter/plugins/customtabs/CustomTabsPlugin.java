@@ -59,6 +59,9 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
             case "launch":
                 launch(((Map<String, Object>) call.arguments), result);
                 break;
+            case "launchNative":
+                launchNative(((Map<String, Object>) call.arguments), result);
+                break;
             case "isSupportCustomTabs":
                 isSupportCustomTabs(result);
                 break;
@@ -72,6 +75,23 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
         result.success(!launcher.getSupportCustomTabsPackages(registrar.context()).isEmpty());
     }
 
+
+    private void launchNative(@NonNull final Map<String, Object> args, @NonNull MethodChannel.Result result) {
+        final Context context;
+        if (registrar.activity() != null) {
+            context = registrar.activity();
+        } else {
+            context = registrar.context();
+        }
+        final Uri uri = Uri.parse(args.get(KEY_URL).toString());
+        final Map<String, Object> options = (Map<String, Object>) args.get(KEY_OPTION);
+        final CustomTabsIntent customTabsIntent = launcher.buildIntent(options);
+
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
+        intent.putExtra(WebViewActivity.EXTRA_OPTION, new HashMap<>(options));
+        context.startActivity(intent, customTabsIntent.startAnimationBundle);
+    }
 
     @SuppressWarnings("unchecked")
     private void launch(@NonNull final Map<String, Object> args, @NonNull MethodChannel.Result result) {
@@ -118,13 +138,10 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
                                 Log.d("CustomTabs", "notImplemented");
                             }
                         });
-                        return;
                     }
+                } else {
+                    result.error("-1", "can't handle this", null);
                 }
-                Intent intent = new Intent(context, WebViewActivity.class);
-                intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
-                intent.putExtra(WebViewActivity.EXTRA_OPTION, new HashMap<>(options));
-                context.startActivity(intent, customTabsIntent.startAnimationBundle);
             });
             result.success(null);
         } catch (ActivityNotFoundException e) {

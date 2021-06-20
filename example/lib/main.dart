@@ -17,44 +17,65 @@ class MyApp extends StatelessWidget {
           title: const Text('Flutter Custom Tabs Example'),
         ),
         body: Center(
-          child: TextButton(
-            child: Text(
-              'Show Flutter homepage',
-              style: TextStyle(
-                fontSize: 17,
-                color: theme.primaryColor,
+          child: Column(
+            children: [
+              TextButton(
+                child: Text(
+                  'CustomTab',
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: theme.primaryColor,
+                  ),
+                ),
+                onPressed: () => _launchURL(context, true),
               ),
-            ),
-            onPressed: () => _launchURL(context),
+              TextButton(
+                child: Text(
+                  'Native',
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: theme.primaryColor,
+                  ),
+                ),
+                onPressed: () async => _launchURL(context, false),
+              )
+            ],
           ),
         ),
       ),
     );
   }
 
-  Future<void> _launchURL(BuildContext context) async {
+  Future<void> _launchURL(BuildContext context, bool customTabs) async {
     try {
       final isSupport = await isSupportCustomTabs;
       print(isSupport);
-      await launch(
-        'https://www.zhihu.com/question/40492181/answer/1910855638?content_id=1381679307534778368&type=zvideo',
-        // handler: (url) async {
-        //   print(url);
-        // },
-        option: CustomTabsOption(
-          toolbarColor: Colors.white,
-          enableDefaultShare: true,
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-          animation: CustomTabsAnimation.slideIn(),
-          extraCustomTabs: const <String>[
-            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
-            'org.mozilla.firefox',
-            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
-            'com.microsoft.emmx',
-          ],
-        ),
+      final option = CustomTabsOption(
+        toolbarColor: Colors.white,
+        enableDefaultShare: true,
+        enableUrlBarHiding: true,
+        showPageTitle: true,
+        animation: CustomTabsAnimation.slideIn(),
+        extraCustomTabs: const <String>[
+          // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+          'org.mozilla.firefox',
+          // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+          'com.microsoft.emmx',
+        ],
       );
+      const url =
+          'https://www.zhihu.com/question/40492181/answer/1910855638?content_id=1381679307534778368&type=zvideo';
+      if (customTabs) {
+        await launch(
+          url,
+          handler: (url) async {
+            launchNative(url, option: option).then((value) => null);
+          },
+          option: option,
+        );
+      } else {
+        await launchNative(url, option: option);
+      }
     } catch (e) {
       // An exception is thrown if browser app is not installed on Android device.
       debugPrint(e.toString());

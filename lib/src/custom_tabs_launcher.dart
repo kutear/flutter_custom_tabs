@@ -58,6 +58,16 @@ Future<bool> customTabsLauncher(
       .then((value) => value == true ? true : false);
 }
 
+Future<bool> customLaunchNative(String urlString, CustomTabsOption option) {
+  final args = <String, dynamic>{
+    'url': urlString,
+    'option': option.toMap()
+  };
+  return _channel
+      .invokeMethod<bool>('launchNative', args)
+      .then((value) => value == true ? true : false);
+}
+
 Future<bool> get isSupportCustomTabsImpl {
   return _channel
       .invokeMethod<bool>('isSupportCustomTabs')
