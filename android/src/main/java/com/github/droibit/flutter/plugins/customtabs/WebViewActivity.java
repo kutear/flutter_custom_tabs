@@ -5,10 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -97,6 +100,22 @@ public class WebViewActivity extends AppCompatActivity {
         if (option != null && option.get(Launcher.KEY_OPTIONS_TOOLBAR_COLOR) != null) {
             toolBarColor = Color.parseColor((String) option.get(Launcher.KEY_OPTIONS_TOOLBAR_COLOR));
         }
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        if (Build.VERSION_CODES.LOLLIPOP <= Build.VERSION.SDK_INT) {
+            getWindow().setStatusBarColor(toolBarColor);
+        }
+        View decor = window.getDecorView();
+        int ui = decor.getSystemUiVisibility();
+        if (getTintColor() == Color.BLACK) {
+            ui |=View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else {
+            ui &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        }
+        decor.setSystemUiVisibility(ui);
+
         setContentView(R.layout.webview_activity);
         webView = findViewById(R.id.web_act_webview);
         toolbar = findViewById(R.id.web_act_toolbar);
