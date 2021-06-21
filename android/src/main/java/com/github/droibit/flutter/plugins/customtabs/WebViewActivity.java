@@ -44,9 +44,9 @@ public class WebViewActivity extends AppCompatActivity {
     private Map<String, Object> option = new HashMap<>();
 
     private int getTintColor() {
-        int red = toolBarColor & 0xFF0000;
-        int green = toolBarColor & 0x00FF00;
-        int blue = toolBarColor & 0x0000FF;
+        int red = (toolBarColor >> 16) & 0xFF;
+        int green = (toolBarColor >> 8) & 0xFF;
+        int blue = toolBarColor & 0xFF;
         double gray = red * 0.299 + green * 0.587 + blue * 0.114;
         return gray > 186 ? Color.BLACK : Color.WHITE;
     }
