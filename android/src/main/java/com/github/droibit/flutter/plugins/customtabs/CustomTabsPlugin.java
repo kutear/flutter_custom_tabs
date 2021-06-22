@@ -19,6 +19,8 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
+import static android.content.Intent.ACTION_VIEW;
+
 public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
     private MethodChannel globalChannel;
 
@@ -85,15 +87,12 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
         } else {
             context = registrar.context();
         }
-        Intent intent = new Intent();
-        String pkg = Launcher.getDefaultActionView(context);
-        if (pkg == null) {
-            result.error("-1","can't find view", null);
-            return;
-        }
         final Uri uri = Uri.parse(args.get(KEY_URL).toString());
-        intent.setPackage(pkg);
-        intent.setData(uri);
+        Intent intent = new Intent(ACTION_VIEW, uri);
+        String pkg = Launcher.getDefaultActionView(context);
+        if (pkg != null) {
+            intent.setPackage(pkg);
+        }
         context.startActivity(intent);
         result.success(true);
     }
