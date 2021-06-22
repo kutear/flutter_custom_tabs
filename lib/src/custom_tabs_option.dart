@@ -17,7 +17,6 @@ class CustomTabsOption {
     this.showPageTitle,
     this.enableInstantApps,
     this.animation,
-    this.extraCustomTabs,
     this.headers,
   });
 
@@ -38,9 +37,6 @@ class CustomTabsOption {
 
   ///  Enter and exit animation.
   final CustomTabsAnimation? animation;
-
-  ///  Package list of non-Chrome browsers supporting Custom Tabs. The top of the list is used with the highest priority.
-  final List<String>? extraCustomTabs;
 
   /// Request Headers
   final Map<String, String>? headers;
@@ -64,9 +60,6 @@ class CustomTabsOption {
     }
     if (animation != null) {
       dest['animations'] = animation?.toMap();
-    }
-    if (extraCustomTabs != null) {
-      dest['extraCustomTabs'] = extraCustomTabs;
     }
     if (headers != null) {
       dest['headers'] = headers;

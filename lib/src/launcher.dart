@@ -32,10 +32,9 @@ import './custom_tabs_option.dart';
 /// ```
 Future<void> launch(
   String urlString, {
-  FallbackHandler? handler,
   required CustomTabsOption option,
 }) {
-  return _launcher(urlString, option, handler);
+  return _launcher(urlString, option);
 }
 
 Future<void> launchNative(
@@ -45,12 +44,15 @@ Future<void> launchNative(
   return customLaunchNative(urlString, option);
 }
 
+Future<void> launchUrl(String urlString) {
+  return customLaunchUrl(urlString);
+}
+
 Future<bool> get isSupportCustomTabs => isSupportCustomTabsImpl;
 
 typedef _PlatformLauncher = Future<void> Function(
   String urlString,
-  CustomTabsOption option,
-  FallbackHandler? handler,
+  CustomTabsOption option
 );
 
 typedef FallbackHandler = Future<void> Function(String urlString);

@@ -131,13 +131,11 @@ public class Launcher {
         }
     }
 
-    public void launch(@NonNull Context context, @NonNull Uri uri,
-                       @NonNull CustomTabsIntent customTabsIntent,
-                       @NonNull LauncherErrorHandle handle) {
+    public boolean launch(@NonNull Context context, @NonNull Uri uri,
+                       @NonNull CustomTabsIntent customTabsIntent) {
         List<String> supportCustomTabsPackages = getSupportCustomTabsPackages(context);
         if (supportCustomTabsPackages.isEmpty()) {
-            handle.handle(new Exception("not install customTabs Browser"));
-            return;
+            return false;
         }
 
         String defaultCustomTabs = findFirstPackage(supportCustomTabsPackages, pkg -> pkg.contains("chrome"));
@@ -150,6 +148,7 @@ public class Launcher {
 
         customTabsIntent.intent.setPackage(defaultCustomTabs);
         customTabsIntent.launchUrl(context, uri);
+        return true;
     }
 
     interface Condition {
@@ -159,6 +158,16 @@ public class Launcher {
     private String findFirstPackage(@NonNull List<String> packages, @NonNull Condition condition) {
         for (String pkg : packages) {
             if (condition.find(pkg)) return pkg;
+        }
+        return null;
+    }
+
+    public static String getDefaultActionView(@NonNull Context context) {
+        final PackageManager pm = context.getPackageManager();
+        final Intent activityIntent = new Intent(ACTION_VIEW, URI_);
+        final ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
+        if (defaultViewHandlerInfo != null) {
+            return defaultViewHandlerInfo.activityInfo.packageName;
         }
         return null;
     }

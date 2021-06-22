@@ -38,6 +38,16 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async => _launchURL(context, false),
+              ),
+              TextButton(
+                child: Text(
+                  'Force System',
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: theme.primaryColor,
+                  ),
+                ),
+                onPressed: () async => launchUrl('https://www.zhihu.com/question/40492181/answer/1910855638?content_id=1381679307534778368&type=zvideo'),
               )
             ],
           ),
@@ -56,21 +66,12 @@ class MyApp extends StatelessWidget {
         enableUrlBarHiding: true,
         showPageTitle: true,
         animation: CustomTabsAnimation.slideIn(),
-        extraCustomTabs: const <String>[
-          // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
-          'org.mozilla.firefox',
-          // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
-          'com.microsoft.emmx',
-        ],
       );
       const url =
           'https://www.zhihu.com/question/40492181/answer/1910855638?content_id=1381679307534778368&type=zvideo';
       if (customTabs) {
         await launch(
           url,
-          handler: (url) async {
-            launchNative(url, option: option).then((value) => null);
-          },
           option: option,
         );
       } else {

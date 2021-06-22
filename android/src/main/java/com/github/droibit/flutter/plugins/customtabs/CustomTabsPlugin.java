@@ -56,11 +56,14 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
     @Override
     public void onMethodCall(MethodCall call, final MethodChannel.Result result) {
         switch (call.method) {
-            case "launch":
+            case "launchCustomTabs":
                 launch(((Map<String, Object>) call.arguments), result);
                 break;
             case "launchNative":
                 launchNative(((Map<String, Object>) call.arguments), result);
+                break;
+            case "launchUrl" :
+                launchUrl(((Map<String, Object>) call.arguments), result);
                 break;
             case "isSupportCustomTabs":
                 isSupportCustomTabs(result);
@@ -75,6 +78,25 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
         result.success(!launcher.getSupportCustomTabsPackages(registrar.context()).isEmpty());
     }
 
+    private void launchUrl(@NonNull final Map<String, Object> args, @NonNull MethodChannel.Result result) {
+        final Context context;
+        if (registrar.activity() != null) {
+            context = registrar.activity();
+        } else {
+            context = registrar.context();
+        }
+        Intent intent = new Intent();
+        String pkg = Launcher.getDefaultActionView(context);
+        if (pkg == null) {
+            result.error("-1","can't find view", null);
+            return;
+        }
+        final Uri uri = Uri.parse(args.get(KEY_URL).toString());
+        intent.setPackage(pkg);
+        intent.setData(uri);
+        context.startActivity(intent);
+        result.success(true);
+    }
 
     private void launchNative(@NonNull final Map<String, Object> args, @NonNull MethodChannel.Result result) {
         final Context context;
@@ -91,6 +113,7 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
         intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
         intent.putExtra(WebViewActivity.EXTRA_OPTION, new HashMap<>(options));
         context.startActivity(intent, customTabsIntent.startAnimationBundle);
+        result.success(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -106,44 +129,9 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
             context = registrar.context();
             customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-
         try {
-            launcher.launch(context, uri, customTabsIntent, throwable -> {
-                final Object id = args.get(KEY_ID);
-                if (id != null) {
-                    int idInt = -1;
-                    try {
-                        idInt = Integer.parseInt(id.toString());
-                    } catch (Exception e) {
-                        // ignore
-                    }
-                    if (idInt >= 0) {
-                        HashMap<String, Object> args1 = new HashMap<>();
-                        args1.put("id", idInt);
-                        args1.put("url", uri.toString());
-                        globalChannel.invokeMethod("handle", args1, new MethodChannel.Result() {
-                            @Override
-                            public void success(@Nullable Object result1) {
-                                Log.d("CustomTabs", "success");
-                            }
-
-                            @Override
-                            public void error(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
-                                Log.d("CustomTabs", errorMessage);
-
-                            }
-
-                            @Override
-                            public void notImplemented() {
-                                Log.d("CustomTabs", "notImplemented");
-                            }
-                        });
-                    }
-                } else {
-                    result.error("-1", "can't handle this", null);
-                }
-            });
-            result.success(null);
+            boolean launchResult = launcher.launch(context, uri, customTabsIntent);
+            result.success(launchResult);
         } catch (ActivityNotFoundException e) {
             result.error(CODE_LAUNCH_ERROR, e.getMessage(), null);
         }

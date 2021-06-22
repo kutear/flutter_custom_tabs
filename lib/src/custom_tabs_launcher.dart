@@ -8,28 +8,12 @@ import 'custom_tabs_option.dart';
 const MethodChannel _channel =
     MethodChannel('com.github.droibit.flutter.plugins.custom_tabs');
 
-final handles = <int, FallbackHandler>{};
 var _isInit = false;
-var _index = 0;
 
 void _init() {
-  _channel.setMethodCallHandler((methodCall) async {
-    switch (methodCall.method) {
-      case 'handle':
-        final args = Map<String, dynamic>.from(methodCall.arguments);
-        final id = args["id"] as int;
-        final url = args["url"] as String;
-        final handler = handles[id];
-        if (handler != null) {
-          handler(url);
-          handles.remove(id);
-        }
-    }
-  });
 }
 
-Future<bool> customTabsLauncher(
-    String urlString, CustomTabsOption option, FallbackHandler? handler) {
+Future<bool> customTabsLauncher(String urlString, CustomTabsOption option) {
   if (!_isInit) {
     _init();
     _isInit = true;
@@ -43,18 +27,21 @@ Future<bool> customTabsLauncher(
     );
   }
 
-  final id = _index++;
-  if (handler != null) {
-    handles[id] = handler;
-  }
-
   final args = <String, dynamic>{
     'url': urlString,
     'option': option.toMap(),
-    'id': handler == null ? -1 : id
   };
   return _channel
-      .invokeMethod<bool>('launch', args)
+      .invokeMethod<bool>('launchCustomTabs', args)
+      .then((value) => value == true ? true : false);
+}
+
+Future<bool> customLaunchUrl(String url) {
+  final args = <String, dynamic>{
+    'url': url,
+  };
+  return _channel
+      .invokeMethod<bool>('launchUrl', args)
       .then((value) => value == true ? true : false);
 }
 
