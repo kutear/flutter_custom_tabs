@@ -30,27 +30,27 @@ import './custom_tabs_option.dart';
 ///   ),
 /// );
 /// ```
-Future<void> launch(
+Future<bool> launch(
   String urlString, {
   required CustomTabsOption option,
 }) {
   return _launcher(urlString, option);
 }
 
-Future<void> launchNative(
+Future<bool> launchNative(
   String urlString, {
   required CustomTabsOption option,
 }) {
   return customLaunchNative(urlString, option);
 }
 
-Future<void> launchUrl(String urlString) {
+Future<bool> launchUrl(String urlString) {
   return customLaunchUrl(urlString);
 }
 
 Future<bool> get isSupportCustomTabs => isSupportCustomTabsImpl;
 
-typedef _PlatformLauncher = Future<void> Function(
+typedef _PlatformLauncher = Future<bool> Function(
   String urlString,
   CustomTabsOption option
 );
