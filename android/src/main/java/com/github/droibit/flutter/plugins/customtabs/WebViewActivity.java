@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ import java.util.Map;
 
 public class WebViewActivity extends AppCompatActivity {
     public static final String EXTRA_URL = "extra.url";
+    public static final String EXTRA_TITLE = "extra.title";
     public static final String EXTRA_OPTION = "extra.option";
     public static final String EXTRA_ENTER_ANIM = "extra.enter.anim";
     public static final String EXTRA_EXIT_ANIM = "extra.exit.anim";
@@ -55,7 +57,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onReceivedTitle(WebView webView, String s) {
             super.onReceivedTitle(webView, s);
-            toolbar.setTitle(s);
+            getSupportActionBar().setTitle(s);
         }
 
         @Override
@@ -96,6 +98,7 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String url = getIntent().getStringExtra(EXTRA_URL);
+        String title = getIntent().getStringExtra(EXTRA_TITLE);
         option = (Map<String, Object>) getIntent().getSerializableExtra(EXTRA_OPTION);
         if (option != null && option.get(Launcher.KEY_OPTIONS_TOOLBAR_COLOR) != null) {
             toolBarColor = Color.parseColor((String) option.get(Launcher.KEY_OPTIONS_TOOLBAR_COLOR));
@@ -121,7 +124,7 @@ public class WebViewActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.web_act_toolbar);
         progressBar = findViewById(R.id.web_act_progress_bar);
         progressBar.setMax(100);
-        init();
+        init(title);
         configWebView(url);
     }
 
@@ -134,12 +137,15 @@ public class WebViewActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void init() {
+    private void init(String title) {
         setSupportActionBar(toolbar);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_close_24);
         if (drawable != null) {
             DrawableCompat.setTint(drawable, getTintColor());
             toolbar.setNavigationIcon(drawable);
+        }
+        if (!TextUtils.isEmpty(title)) {
+            getSupportActionBar().setTitle(title);
         }
         toolbar.setNavigationOnClickListener(v -> finish());
         toolbar.setBackgroundColor(toolBarColor);

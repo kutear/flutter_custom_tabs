@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+
 import './custom_tabs_launcher.dart';
 import './custom_tabs_option.dart';
 
@@ -39,9 +40,10 @@ Future<bool> launch(
 
 Future<bool> launchNative(
   String urlString, {
+  String? title,
   required CustomTabsOption option,
 }) {
-  return customLaunchNative(urlString, option);
+  return customLaunchNative(urlString, title, option);
 }
 
 Future<bool> launchUrl(String urlString) {
@@ -51,9 +53,7 @@ Future<bool> launchUrl(String urlString) {
 Future<bool> get isSupportCustomTabs => isSupportCustomTabsImpl;
 
 typedef _PlatformLauncher = Future<bool> Function(
-  String urlString,
-  CustomTabsOption option
-);
+    String urlString, CustomTabsOption option);
 
 typedef FallbackHandler = Future<void> Function(String urlString);
 

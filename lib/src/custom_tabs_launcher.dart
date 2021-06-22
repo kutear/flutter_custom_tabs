@@ -45,11 +45,14 @@ Future<bool> customLaunchUrl(String url) {
       .then((value) => value == true ? true : false);
 }
 
-Future<bool> customLaunchNative(String urlString, CustomTabsOption option) {
+Future<bool> customLaunchNative(String urlString,String? title, CustomTabsOption option) {
   final args = <String, dynamic>{
     'url': urlString,
     'option': option.toMap()
   };
+  if (title != null) {
+    args['title'] = title;
+  }
   return _channel
       .invokeMethod<bool>('launchNative', args)
       .then((value) => value == true ? true : false);

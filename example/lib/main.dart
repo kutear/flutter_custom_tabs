@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
           option: option,
         );
       } else {
-        await launchNative(url, option: option);
+        await launchNative(url, title: 'Just Title', option: option);
       }
     } catch (e) {
       // An exception is thrown if browser app is not installed on Android device.

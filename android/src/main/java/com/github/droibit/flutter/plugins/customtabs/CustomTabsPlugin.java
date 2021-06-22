@@ -38,6 +38,8 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
 
     private static final String KEY_URL = "url";
 
+    private static final String KEY_TITLE = "title";
+
     private static final String KEY_ID = "id";
 
     private static final String KEY_EXTRA_CUSTOM_TABS = "extraCustomTabs";
@@ -105,11 +107,13 @@ public class CustomTabsPlugin implements MethodChannel.MethodCallHandler {
             context = registrar.context();
         }
         final Uri uri = Uri.parse(args.get(KEY_URL).toString());
+        final String title = String.valueOf(args.get(KEY_TITLE));
         final Map<String, Object> options = (Map<String, Object>) args.get(KEY_OPTION);
         final CustomTabsIntent customTabsIntent = launcher.buildIntent(options);
 
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
+        intent.putExtra(WebViewActivity.EXTRA_TITLE, title);
         intent.putExtra(WebViewActivity.EXTRA_OPTION, new HashMap<>(options));
         context.startActivity(intent, customTabsIntent.startAnimationBundle);
         result.success(true);
