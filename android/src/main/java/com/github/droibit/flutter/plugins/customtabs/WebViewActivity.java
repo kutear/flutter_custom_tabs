@@ -46,10 +46,10 @@ public class WebViewActivity extends AppCompatActivity {
     private WebView webView;
     private Toolbar toolbar;
     private LinearProgressIndicator progressBar;
-    private int toolBarColor = Color.WHITE;
+    protected int toolBarColor = Color.WHITE;
     private Map<String, Object> option = new HashMap<>();
 
-    private int getTintColor() {
+    protected int getTintColor() {
         int red = (toolBarColor >> 16) & 0xFF;
         int green = (toolBarColor >> 8) & 0xFF;
         int blue = toolBarColor & 0xFF;
@@ -143,13 +143,17 @@ public class WebViewActivity extends AppCompatActivity {
         }
         decor.setSystemUiVisibility(ui);
 
-        setContentView(R.layout.webview_activity);
+        setContentView(getLayout());
         webView = findViewById(R.id.web_act_webview);
         toolbar = findViewById(R.id.web_act_toolbar);
         progressBar = findViewById(R.id.web_act_progress_bar);
         progressBar.setMax(100);
         init(title);
         configWebView(url);
+    }
+
+    protected int getLayout() {
+        return R.layout.webview_activity;
     }
 
     @Override
@@ -191,16 +195,20 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.shareButton) {
-            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-            String shareBody = webView.getTitle() + "\n" + webView.getUrl();
-            String shareSubject = webView.getTitle();
-            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject);
-            startActivity(Intent.createChooser(sharingIntent, "Share"));
+            showShareSheet();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void showShareSheet() {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = webView.getTitle() + "\n" + webView.getUrl();
+        String shareSubject = webView.getTitle();
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject);
+        startActivity(Intent.createChooser(sharingIntent, "Share"));
     }
 
     private void configWebView(String url) {
