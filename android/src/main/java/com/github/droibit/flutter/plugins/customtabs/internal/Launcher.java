@@ -138,11 +138,12 @@ public class Launcher {
             return false;
         }
 
-        String defaultCustomTabs = findFirstPackage(supportCustomTabsPackages, pkg -> pkg.contains("chrome"));
+
+        String defaultCustomTabs = getDefaultCustomTabsPackage(context);
+        if (defaultCustomTabs == null)
+            defaultCustomTabs = findFirstPackage(supportCustomTabsPackages, pkg -> pkg.contains("chrome"));
         if (defaultCustomTabs == null)
             defaultCustomTabs = findFirstPackage(supportCustomTabsPackages, pkg -> pkg.contains("firefox"));
-        if (defaultCustomTabs == null)
-            defaultCustomTabs = getDefaultCustomTabsPackage(context);
         if (defaultCustomTabs == null)
             defaultCustomTabs = supportCustomTabsPackages.get(0);
 
